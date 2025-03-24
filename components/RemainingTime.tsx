@@ -1,5 +1,5 @@
+import { Box, Typography } from "@mui/material";
 import CircularProgress from "@mui/material/CircularProgress";
-import { useEffect, useState } from "react";
 
 export function RemainingTime({
   duration,
@@ -10,27 +10,33 @@ export function RemainingTime({
 }) {
   // TODO: duration must not accept the number zero(0)!
 
-  const [time, setTime] = useState<number>();
-  let timer = remaining;
-  useEffect(() => {
-    const timeId = setInterval(() => {
-      if (timer != 0) {
-        // TODO: It needs resetting after re-rendering the component!
-        --timer;
-      }
-      setTime(timer * (100 / duration));
-    }, 1000);
-    return () => {
-      clearInterval(timeId);
-    };
-  }, [remaining]);
   return (
-    <CircularProgress
-      variant="determinate"
-      value={time}
-      thickness={3}
-      size={150}
-      color={time == -100 ? "error" : "primary"}
-    />
+    <Box sx={{ position: "relative" }}>
+      <CircularProgress
+        variant="determinate"
+        value={-remaining * (100 / duration)}
+        thickness={3}
+        size={150}
+        color={remaining < 10 && remaining < duration / 2 ? "error" : "primary"}
+      />
+      <Box
+        sx={{
+          position: "absolute",
+          top: "50%",
+          left: "50%",
+          transform: "translate(-50%, -50% )",
+        }}
+      >
+        <Typography
+          variant="h3"
+          component="p"
+          color={
+            remaining < 10 && remaining < duration / 2 ? "error" : "primary"
+          }
+        >
+          {remaining}
+        </Typography>
+      </Box>
+    </Box>
   );
 }
