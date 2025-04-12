@@ -3,6 +3,8 @@ import "./globals.css";
 import Grid from "@mui/material/Grid2";
 import Container from "@mui/material/Container";
 import { Header, Footer } from "@/components/layout/";
+import { GoogleAnalytics } from "@next/third-parties/google";
+import Script from "next/script";
 
 export const metadata: Metadata = {
   title: "XOTP",
@@ -124,6 +126,10 @@ export default function RootLayout({
           </Grid>
           <Footer />
         </Grid>
+        <GoogleAnalytics gaId="G-8W7L3479CL" />
+        <Script id="gtm" strategy="afterInteractive">
+          {`<!-- Google tag (gtag.js) -->window.dataLayer = window.dataLayer || [];function gtag(){dataLayer.push(arguments);}gtag('js', new Date());gtag('config', 'G-8W7L3479CL');`}
+        </Script>
       </body>
     </html>
   );
