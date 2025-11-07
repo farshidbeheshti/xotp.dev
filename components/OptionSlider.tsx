@@ -1,9 +1,16 @@
-import Slider from "@mui/material/Slider";
+import React from 'react';
+import Slider, { SliderProps } from "@mui/material/Slider";
 
-export function OptionSlider(props) {
-  const { onChangeHandler, name, ...fields } = props;
-  function onValueChanged(e, value) {
-    if (onChangeHandler) onChangeHandler({ ...e, name, value });
+interface OptionSliderProps extends Omit<SliderProps, 'onChangeCommitted'> {
+  onChangeHandler?: (event: { name: string; value: number }) => void;
+  name: string;
+}
+
+export function OptionSlider({ onChangeHandler, name, ...fields }: OptionSliderProps) {
+  function onValueChanged(event: Event | React.SyntheticEvent, value: number | number[]) {
+    if (onChangeHandler && typeof value === 'number') {
+      onChangeHandler({ name, value });
+    }
   }
   return <Slider {...fields} onChangeCommitted={onValueChanged} />;
 }
