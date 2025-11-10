@@ -10,6 +10,7 @@ import { ContentCopy } from "@mui/icons-material";
 import { QRCodeSVG } from "qrcode.react";
 import { RemainingTime } from "@/components/RemainingTime";
 import { OTPResult } from "@/types/otp";
+import { copyToClipboard } from "@/lib/clipboard";
 
 interface OTPDisplayProps {
   otp: OTPResult;
@@ -18,6 +19,10 @@ interface OTPDisplayProps {
 }
 
 export function OTPDisplay({ otp, duration, remaining }: OTPDisplayProps) {
+  const handleCopyKeyUri = async () => {
+    await copyToClipboard(otp.keyUri);
+  };
+
   return (
     <Stack alignItems="center" width="100%">
       <RemainingTime duration={duration} remaining={remaining} />
@@ -56,7 +61,13 @@ export function OTPDisplay({ otp, duration, remaining }: OTPDisplayProps) {
         slotProps={{ htmlInput: { readOnly: true } }}
         focused
         InputProps={{
-          endAdornment: <InputAdornment position="end"></InputAdornment>,
+          endAdornment: (
+            <InputAdornment position="end">
+              <IconButton onClick={handleCopyKeyUri} edge="end">
+                <ContentCopy />
+              </IconButton>
+            </InputAdornment>
+          ),
         }}
       />
     </Stack>
