@@ -8,13 +8,16 @@ export function RemainingTime({
   duration: number;
   remaining: number;
 }) {
-  // TODO: duration must not accept the number zero(0)!
+  const progressValue = Math.max(
+    0,
+    Math.min(100, (remaining / duration) * 100)
+  );
 
   return (
     <Box sx={{ position: "relative" }}>
       <CircularProgress
         variant="determinate"
-        value={-remaining * (100 / duration)}
+        value={-progressValue}
         thickness={3}
         size={150}
         color={remaining < 10 && remaining < duration / 2 ? "error" : "primary"}

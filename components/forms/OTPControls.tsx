@@ -1,9 +1,7 @@
-import { TextField, Typography } from "@mui/material";
-import Grid from "@mui/material/Grid2";
+import { TextField, Typography, Grid } from "@mui/material";
 import { OTPOptions, Algorithm } from "@/types/otp";
 import { OptionSlider } from "@/components/OptionSlider";
 import { AlgorithmSelector } from "@/components/ui/AlgorithmSelector";
-import { Tip } from "@/components/Tip";
 import {
   DURATION_LIMITS,
   DIGITS_LIMITS,
@@ -17,9 +15,13 @@ interface OTPControlsProps {
 
 export function OTPControls({ options, onOptionsChange }: OTPControlsProps) {
   return (
-    <Grid container rowSpacing={5} padding={1}>
-      <Grid size={{ xs: 12 }}>
-        <Typography variant="caption" color="#0009">
+    <Grid container spacing={3}>
+      <Grid item xs={12}>
+        <Typography
+          variant="caption"
+          color="text.secondary"
+          sx={{ mb: 1, display: "block" }}
+        >
           Duration
         </Typography>
         <OptionSlider
@@ -32,14 +34,21 @@ export function OTPControls({ options, onOptionsChange }: OTPControlsProps) {
           defaultValue={DEFAULT_OTP_OPTIONS.duration}
           valueLabelDisplay="on"
         />
-        <Tip
-          text="Duration (in seconds) a token is valid for."
-          icon="duration"
-        />
+        <Typography
+          variant="caption"
+          color="text.secondary"
+          sx={{ mt: 0.5, opacity: 0.8 }}
+        >
+          Token validity period (30s is standard)
+        </Typography>
       </Grid>
 
-      <Grid size={{ xs: 12 }}>
-        <Typography variant="caption" color="#0009">
+      <Grid item xs={12}>
+        <Typography
+          variant="caption"
+          color="text.secondary"
+          sx={{ mb: 1, display: "block" }}
+        >
           Digits
         </Typography>
         <OptionSlider
@@ -53,24 +62,30 @@ export function OTPControls({ options, onOptionsChange }: OTPControlsProps) {
           onChangeHandler={(e) => onOptionsChange("digits", e.value)}
           defaultValue={DEFAULT_OTP_OPTIONS.digits}
         />
-        <Tip text="The number of digits for the token" icon="digits" />
+        <Typography
+          variant="caption"
+          color="text.secondary"
+          sx={{ mt: 0.5, opacity: 0.8 }}
+        >
+          OTP length (6 digits recommended)
+        </Typography>
       </Grid>
 
-      <Grid size={{ xs: 6 }}>
+      <Grid item xs={12}>
         <AlgorithmSelector
           value={options.algorithm as Algorithm}
           onChange={(value) => onOptionsChange("algorithm", value)}
         />
-      </Grid>
-      <Grid size={{ xs: 6 }}>
-        <Tip
-          text="The algorithm used for calculating the HMAC, default is 'sha1'."
-          icon="hashAlgo"
-          top={0.5}
-        />
+        <Typography
+          variant="caption"
+          color="text.secondary"
+          sx={{ mt: 0.5, opacity: 0.8, display: "block" }}
+        >
+          HMAC algorithm (sha1 for Google Authenticator)
+        </Typography>
       </Grid>
 
-      <Grid size={{ xs: 12 }}>
+      <Grid item xs={12}>
         <TextField
           type="text"
           label="Secret"
@@ -78,40 +93,42 @@ export function OTPControls({ options, onOptionsChange }: OTPControlsProps) {
           onChange={(e) => onOptionsChange("secret", e.target.value)}
           fullWidth
           size="small"
-        />
-        <Tip
-          text="Secret key used by the hash function to calculate the HMAC."
-          icon="secret"
-          top={0.5}
+          helperText="Base32 encoded secret key (auto-generated if empty)"
         />
       </Grid>
 
-      <Grid size={{ xs: 12 }} container rowSpacing={2}>
-        <Grid size={{ xs: 6 }}>
-          <TextField
-            type="text"
-            label="Account"
-            value={options.account}
-            onChange={(e) => onOptionsChange("account", e.target.value)}
-            size="small"
-            fullWidth
-          />
+      <Grid item xs={12}>
+        <Grid container spacing={2}>
+          <Grid item xs={6}>
+            <TextField
+              type="text"
+              label="Account"
+              value={options.account}
+              onChange={(e) => onOptionsChange("account", e.target.value)}
+              size="small"
+              fullWidth
+              helperText="User identifier"
+            />
+          </Grid>
+          <Grid item xs={6}>
+            <TextField
+              type="text"
+              label="Issuer"
+              value={options.issuer}
+              onChange={(e) => onOptionsChange("issuer", e.target.value)}
+              size="small"
+              fullWidth
+              helperText="Service name"
+            />
+          </Grid>
         </Grid>
-        <Grid size={{ xs: 6 }}>
-          <TextField
-            type="text"
-            label="Issuer"
-            value={options.issuer}
-            onChange={(e) => onOptionsChange("issuer", e.target.value)}
-            size="small"
-            fullWidth
-          />
-        </Grid>
-        <Tip
-          text="The account is the identifier/name of the user and the issuer is the provider or service."
-          icon="account"
-          top={0.5}
-        />
+        <Typography
+          variant="caption"
+          color="text.secondary"
+          sx={{ mt: 0.5, opacity: 0.8, display: "block" }}
+        >
+          Display labels for authenticator apps
+        </Typography>
       </Grid>
     </Grid>
   );

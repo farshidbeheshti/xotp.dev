@@ -13,6 +13,13 @@ export function useOTPGenerator(initialOptions: OTPOptions) {
   const [remaining, setRemaining] = useState(0);
   const [needsReset, setNeedsReset] = useState(true);
 
+  // Update remaining time immediately when duration changes
+  useEffect(() => {
+    const newRemaining =
+      options.duration - (Math.floor(Date.now() / 1000) % options.duration);
+    setRemaining(newRemaining);
+  }, [options.duration]);
+
   const generateOTP = useCallback(async (newOptions: OTPOptions) => {
     try {
       const request = {
@@ -20,13 +27,14 @@ export function useOTPGenerator(initialOptions: OTPOptions) {
         secret: newOptions.secret.toUpperCase(),
       };
 
+      const newRemaining =
+        newOptions.duration -
+        (Math.floor(Date.now() / 1000) % newOptions.duration);
+      setRemaining(newRemaining);
+      setOptions(request);
+
       const result = await createTOTPToken(request);
       setOtp(result);
-      setRemaining(
-        newOptions.duration -
-          (Math.floor(Date.now() / 1000) % newOptions.duration)
-      );
-      setOptions(request);
       setNeedsReset(false);
     } catch (error) {
       console.error("Failed to generate OTP:", error);
@@ -35,14 +43,16 @@ export function useOTPGenerator(initialOptions: OTPOptions) {
 
   useEffect(() => {
     const interval = setInterval(() => {
-      if (needsReset) generateOTP(options);
+      if (needsReset) {
+        generateOTP(options);
+      } else {
+        const newRemaining =
+          options.duration - (Math.floor(Date.now() / 1000) % options.duration);
+        setRemaining(newRemaining);
 
-      const newRemaining =
-        options.duration - (Math.floor(Date.now() / 1000) % options.duration);
-      setRemaining(newRemaining);
-
-      if (newRemaining === 1) {
-        setNeedsReset(true);
+        if (newRemaining === 1) {
+          setNeedsReset(true);
+        }
       }
     }, 1000);
 
