@@ -4,7 +4,7 @@ import { useOTPGenerator } from "@/hooks/useOTPGenerator";
 import { useDebounce } from "@/hooks/useDebounce";
 import { OTPControls } from "@/components/forms/OTPControls";
 import { OTPDisplay } from "@/components/ui/OTPDisplay";
-
+import { CodePanel } from "@/components/CodePanel";
 import { DEFAULT_OTP_OPTIONS } from "@/constants/otp";
 import { OTPOptions } from "@/types/otp";
 
@@ -67,7 +67,9 @@ export default function Index() {
       </Grid>
 
       {/* Code Panel */}
-      <Grid item xs={12} lg={4}></Grid>
+      <Grid item xs={12} lg={4}>
+        <CodePanel options={options} />
+      </Grid>
     </Grid>
   );
 }
