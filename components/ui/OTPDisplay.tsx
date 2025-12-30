@@ -1,3 +1,4 @@
+import { useState } from "react";
 import {
   Stack,
   Box,
@@ -6,6 +7,8 @@ import {
   IconButton,
   InputAdornment,
   Tooltip,
+  Snackbar,
+  Alert,
 } from "@mui/material";
 import { ContentCopy } from "@mui/icons-material";
 import { QRCodeSVG } from "qrcode.react";
@@ -20,8 +23,11 @@ interface OTPDisplayProps {
 }
 
 export function OTPDisplay({ otp, duration, remaining }: OTPDisplayProps) {
+  const [showToast, setShowToast] = useState(false);
+
   const handleCopyKeyUri = async () => {
     await copyToClipboard(otp.keyUri);
+    setShowToast(true);
   };
 
   return (
@@ -73,6 +79,21 @@ export function OTPDisplay({ otp, duration, remaining }: OTPDisplayProps) {
           }}
         />
       </Tooltip>
+
+      <Snackbar
+        open={showToast}
+        autoHideDuration={2000}
+        onClose={() => setShowToast(false)}
+        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+      >
+        <Alert
+          severity="success"
+          variant="filled"
+          onClose={() => setShowToast(false)}
+        >
+          Key URI copied to clipboard!
+        </Alert>
+      </Snackbar>
     </Stack>
   );
 }
