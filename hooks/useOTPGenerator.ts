@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { OTPOptions, OTPResult } from "@/types/otp";
 import { createTOTPToken } from "@/lib/xotp";
 
@@ -11,14 +11,10 @@ export function useOTPGenerator(initialOptions: OTPOptions) {
   });
   const [options, setOptions] = useState<OTPOptions>(initialOptions);
   const [remaining, setRemaining] = useState(0);
-  const [needsReset, setNeedsReset] = useState(true);
 
-  // Update remaining time immediately when duration changes
-  useEffect(() => {
-    const newRemaining =
-      options.duration - (Math.floor(Date.now() / 1000) % options.duration);
-    setRemaining(newRemaining);
-  }, [options.duration]);
+  // Track the last processed epoch to prevent duplicate generations
+  // Initialize with -1 to force an initial generation
+  const lastEpochRef = useRef<number>(-1);
 
   const generateOTP = useCallback(async (newOptions: OTPOptions) => {
     try {
@@ -27,37 +23,50 @@ export function useOTPGenerator(initialOptions: OTPOptions) {
         secret: newOptions.secret.toUpperCase(),
       };
 
-      const newRemaining =
-        newOptions.duration -
-        (Math.floor(Date.now() / 1000) % newOptions.duration);
-      setRemaining(newRemaining);
       setOptions(request);
 
       const result = await createTOTPToken(request);
       setOtp(result);
-      setNeedsReset(false);
     } catch (error) {
       console.error("Failed to generate OTP:", error);
     }
   }, []);
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      if (needsReset) {
-        generateOTP(options);
-      } else {
-        const newRemaining =
-          options.duration - (Math.floor(Date.now() / 1000) % options.duration);
-        setRemaining(newRemaining);
+    // Function to calculate state
+    const tick = () => {
+      const now = Math.floor(Date.now() / 1000);
+      const duration = options.duration || 30;
 
-        if (newRemaining === 1) {
-          setNeedsReset(true);
-        }
+      const currentEpoch = Math.floor(now / duration);
+      const newRemaining = duration - (now % duration);
+      setRemaining(newRemaining);
+
+      // If we are in a new epoch compared to last run, regenerate
+      // This handles tab sleep/wake correctly because it checks the absolute time window
+      if (currentEpoch > lastEpochRef.current) {
+        lastEpochRef.current = currentEpoch;
+        generateOTP(options);
       }
-    }, 1000);
+    };
+
+    tick();
+
+    const interval = setInterval(tick, 1000);
 
     return () => clearInterval(interval);
-  }, [options, needsReset, generateOTP]);
+  }, [options, generateOTP]);
+
+  useEffect(() => {
+    lastEpochRef.current = -1;
+  }, [
+    options.duration,
+    options.secret,
+    options.algorithm,
+    options.digits,
+    options.account,
+    options.issuer,
+  ]);
 
   return {
     otp,
