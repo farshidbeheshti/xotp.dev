@@ -90,10 +90,19 @@ export function OTPControls({ options, onOptionsChange }: OTPControlsProps) {
           type="text"
           label="Secret"
           value={options.secret}
-          onChange={(e) => onOptionsChange("secret", e.target.value)}
+          onChange={(e) => {
+            // Optional: Force uppercase input for better UX as Base32 is case-insensitive but usually represented in upper case
+            const val = e.target.value.toUpperCase();
+            onOptionsChange("secret", val);
+          }}
           fullWidth
           size="small"
-          helperText="Base32 encoded secret key (auto-generated if empty)"
+          error={!!options.secret && !/^[A-Z2-7]+=*$/.test(options.secret)}
+          helperText={
+            !!options.secret && !/^[A-Z2-7]+=*$/.test(options.secret)
+              ? "Invalid Base32 characters (A-Z, 2-7 only)"
+              : "Base32 encoded secret key (auto-generated if empty)"
+          }
         />
       </Grid>
 
