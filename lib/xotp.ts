@@ -2,6 +2,11 @@
 import * as xotp from "xotp";
 import { OTPOptions, OTPResult } from "@/types/otp";
 
+export async function generateSecret(): Promise<string> {
+  const secret = new xotp.Secret();
+  return secret.toString("base32");
+}
+
 export async function createTOTPToken(options: OTPOptions): Promise<OTPResult> {
   const totp = new xotp.TOTP(options);
 
