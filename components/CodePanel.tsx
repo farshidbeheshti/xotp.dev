@@ -39,7 +39,7 @@ const keyUri = totp.keyUri({
         <Box component="span" sx={{ color: '#79c0ff' }}>TOTP</Box>
         <Box component="span" sx={{ color: '#e2e8f0' }}> &#125; </Box>
         <Box component="span" sx={{ color: '#ff7b72' }}>from</Box>
-        <Box component="span" sx={{ color: '#a5d6ff' }}> 'xotp'</Box>
+        <Box component="span" sx={{ color: '#a5d6ff' }}> &apos;xotp&apos;</Box>
         <Box component="span" sx={{ color: '#e2e8f0' }}>;</Box>
         <br /><br />
         
@@ -50,7 +50,7 @@ const keyUri = totp.keyUri({
         <Box component="span" sx={{ color: '#e2e8f0' }}>.</Box>
         <Box component="span" sx={{ color: '#d2a8ff' }}>from</Box>
         <Box component="span" sx={{ color: '#e2e8f0' }}>(</Box>
-        <Box component="span" sx={{ color: '#a5d6ff' }}>'{options.secret}'</Box>
+        <Box component="span" sx={{ color: '#a5d6ff' }}>&apos;{options.secret}&apos;</Box>
         <Box component="span" sx={{ color: '#e2e8f0' }}>);</Box>
         <br />
         
@@ -65,7 +65,7 @@ const keyUri = totp.keyUri({
         <Box component="span" sx={{ color: '#e2e8f0', ml: 2 }}>  </Box>
         <Box component="span" sx={{ color: '#7ee787' }}>algorithm</Box>
         <Box component="span" sx={{ color: '#e2e8f0' }}>: </Box>
-        <Box component="span" sx={{ color: '#a5d6ff' }}>'{options.algorithm}'</Box>
+        <Box component="span" sx={{ color: '#a5d6ff' }}>&apos;{options.algorithm}&apos;</Box>
         <Box component="span" sx={{ color: '#e2e8f0' }}>,</Box>
         <br />
         
@@ -86,7 +86,7 @@ const keyUri = totp.keyUri({
         <Box component="span" sx={{ color: '#e2e8f0', ml: 2 }}>  </Box>
         <Box component="span" sx={{ color: '#7ee787' }}>issuer</Box>
         <Box component="span" sx={{ color: '#e2e8f0' }}>: </Box>
-        <Box component="span" sx={{ color: '#a5d6ff' }}>'{options.issuer}'</Box>
+        <Box component="span" sx={{ color: '#a5d6ff' }}>&apos;{options.issuer}&apos;</Box>
         <Box component="span" sx={{ color: '#e2e8f0' }}>,</Box>
         <br />
         
@@ -121,7 +121,7 @@ const keyUri = totp.keyUri({
         <Box component="span" sx={{ color: '#e2e8f0', ml: 2 }}>  </Box>
         <Box component="span" sx={{ color: '#7ee787' }}>account</Box>
         <Box component="span" sx={{ color: '#e2e8f0' }}>: </Box>
-        <Box component="span" sx={{ color: '#a5d6ff' }}>'{options.account}'</Box>
+        <Box component="span" sx={{ color: '#a5d6ff' }}>&apos;{options.account}&apos;</Box>
         <Box component="span" sx={{ color: '#e2e8f0' }}>,</Box>
         <br />
         

@@ -5,6 +5,7 @@ import {
   TextField,
   IconButton,
   InputAdornment,
+  Tooltip,
 } from "@mui/material";
 import { ContentCopy } from "@mui/icons-material";
 import { QRCodeSVG } from "qrcode.react";
@@ -52,24 +53,26 @@ export function OTPDisplay({ otp, duration, remaining }: OTPDisplayProps) {
         />
       </Box>
 
-      <TextField
-        fullWidth
-        margin="normal"
-        type="text"
-        label="Key URI"
-        value={otp.keyUri}
-        slotProps={{ htmlInput: { readOnly: true } }}
-        focused
-        InputProps={{
-          endAdornment: (
-            <InputAdornment position="end">
-              <IconButton onClick={handleCopyKeyUri} edge="end">
-                <ContentCopy />
-              </IconButton>
-            </InputAdornment>
-          ),
-        }}
-      />
+      <Tooltip title={otp.keyUri} arrow placement="top">
+        <TextField
+          fullWidth
+          margin="normal"
+          type="text"
+          label="Key URI"
+          value={otp.keyUri}
+          slotProps={{ htmlInput: { readOnly: true } }}
+          focused
+          InputProps={{
+            endAdornment: (
+              <InputAdornment position="end">
+                <IconButton onClick={handleCopyKeyUri} edge="end">
+                  <ContentCopy />
+                </IconButton>
+              </InputAdornment>
+            ),
+          }}
+        />
+      </Tooltip>
     </Stack>
   );
 }
