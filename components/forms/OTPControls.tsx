@@ -1,4 +1,11 @@
-import { TextField, Typography, Grid } from "@mui/material";
+import {
+  TextField,
+  Typography,
+  Grid,
+  IconButton,
+  InputAdornment,
+} from "@mui/material";
+import { Refresh } from "@mui/icons-material";
 import { OTPOptions, Algorithm } from "@/types/otp";
 import { OptionSlider } from "@/components/OptionSlider";
 import { AlgorithmSelector } from "@/components/ui/AlgorithmSelector";
@@ -7,6 +14,7 @@ import {
   DIGITS_LIMITS,
   DEFAULT_OTP_OPTIONS,
 } from "@/constants/otp";
+import { generateSecret } from "@/lib/xotp";
 
 interface OTPControlsProps {
   options: OTPOptions;
@@ -90,10 +98,35 @@ export function OTPControls({ options, onOptionsChange }: OTPControlsProps) {
           type="text"
           label="Secret"
           value={options.secret}
-          onChange={(e) => onOptionsChange("secret", e.target.value)}
+          onChange={(e) => {
+            // Optional: Force uppercase input for better UX as Base32 is case-insensitive but usually represented in upper case
+            const val = e.target.value.toUpperCase();
+            onOptionsChange("secret", val);
+          }}
           fullWidth
           size="small"
-          helperText="Base32 encoded secret key (auto-generated if empty)"
+          error={!!options.secret && !/^[A-Z2-7]+=*$/.test(options.secret)}
+          helperText={
+            !!options.secret && !/^[A-Z2-7]+=*$/.test(options.secret)
+              ? "Invalid Base32 characters (A-Z, 2-7 only)"
+              : "Base32 encoded secret key (auto-generated if empty)"
+          }
+          InputProps={{
+            endAdornment: (
+              <InputAdornment position="end">
+                <IconButton
+                  onClick={async () => {
+                    const newSecret = await generateSecret();
+                    onOptionsChange("secret", newSecret);
+                  }}
+                  edge="end"
+                  title="Generate Random Secret"
+                >
+                  <Refresh />
+                </IconButton>
+              </InputAdornment>
+            ),
+          }}
         />
       </Grid>
 
