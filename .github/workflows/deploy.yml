@@ -1,0 +1,43 @@
+name: Deploy to Server
+
+on:
+  push:
+    branches: ["main"]
+
+jobs:
+  deploy:
+    runs-on: self-hosted
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Install Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: "npm"
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Build Project
+        run: npm run build
+
+      - name: Start/Restart Application (PM2)
+        shell: powershell
+        run: |
+          # Install PM2 globally if not present (or update it)
+          npm install pm2 -g
+
+          # Check if the process is already running
+          $processList = pm2 list
+          if ($processList -match "xotp.dev") {
+              Write-Host "Application is running. Restarting..."
+              pm2 restart xotp.dev
+          } else {
+              Write-Host "Application not found. Starting..."
+              pm2 start npm --name "xotp.dev" -- start
+          }
+        env:
+          NODE_ENV: production
