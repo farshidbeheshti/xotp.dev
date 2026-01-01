@@ -5,12 +5,10 @@ import {
   Typography,
   TextField,
   IconButton,
-  InputAdornment,
   Tooltip,
-  Snackbar,
-  Fade,
+  InputAdornment,
 } from "@mui/material";
-import { ContentCopy, CheckCircle } from "@mui/icons-material";
+import { ContentCopy, Check } from "@mui/icons-material";
 import { QRCodeSVG } from "qrcode.react";
 import { RemainingTime } from "@/components/RemainingTime";
 import { OTPResult } from "@/types/otp";
@@ -23,11 +21,12 @@ interface OTPDisplayProps {
 }
 
 export function OTPDisplay({ otp, duration, remaining }: OTPDisplayProps) {
-  const [showToast, setShowToast] = useState(false);
+  const [copied, setCopied] = useState(false);
 
   const handleCopyKeyUri = async () => {
     await copyToClipboard(otp.keyUri);
-    setShowToast(true);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 500);
   };
 
   return (
@@ -72,42 +71,13 @@ export function OTPDisplay({ otp, duration, remaining }: OTPDisplayProps) {
             endAdornment: (
               <InputAdornment position="end">
                 <IconButton onClick={handleCopyKeyUri} edge="end">
-                  <ContentCopy />
+                  {copied ? <Check color="success" /> : <ContentCopy />}
                 </IconButton>
               </InputAdornment>
             ),
           }}
         />
       </Tooltip>
-
-      <Snackbar
-        open={showToast}
-        autoHideDuration={2000}
-        onClose={() => setShowToast(false)}
-        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
-        TransitionComponent={Fade}
-      >
-        <Box
-          sx={{
-            bgcolor: "rgba(33, 33, 33, 0.95)",
-            color: "white",
-            px: 3,
-            py: 1.5,
-            borderRadius: "50px",
-            display: "flex",
-            alignItems: "center",
-            gap: 1.5,
-            boxShadow: "0 8px 16px rgba(0,0,0,0.1)",
-            mb: 4,
-            backdropFilter: "blur(8px)",
-          }}
-        >
-          <CheckCircle sx={{ fontSize: 20, color: "#4caf50" }} />
-          <Typography variant="body2" fontWeight={600}>
-            Key URI copied
-          </Typography>
-        </Box>
-      </Snackbar>
     </Stack>
   );
 }
