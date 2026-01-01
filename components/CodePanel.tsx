@@ -1,6 +1,7 @@
 'use client';
-import { Card, CardContent, Typography, Box, IconButton } from '@mui/material';
-import { ContentCopy } from '@mui/icons-material';
+import { useState } from 'react';
+import { Card, CardContent, Typography, Box, IconButton, Snackbar, Fade } from '@mui/material';
+import { ContentCopy, CheckCircle } from '@mui/icons-material';
 import { OTPOptions } from '@/types/otp';
 import { copyToClipboard } from '@/lib/clipboard';
 
@@ -9,6 +10,7 @@ interface CodePanelProps {
 }
 
 export function CodePanel({ options }: CodePanelProps) {
+  const [showToast, setShowToast] = useState(false);
   const codeString = `import { Secret, TOTP } from 'xotp';
 
 const secret = Secret.from('${options.secret}');
@@ -27,6 +29,7 @@ const keyUri = totp.keyUri({
 
   const handleCopyCode = async () => {
     await copyToClipboard(codeString);
+    setShowToast(true);
   };
 
   const renderHighlightedCode = () => {
@@ -153,6 +156,35 @@ const keyUri = totp.keyUri({
           {renderHighlightedCode()}
         </Box>
       </CardContent>
+
+      <Snackbar
+        open={showToast}
+        autoHideDuration={2000}
+        onClose={() => setShowToast(false)}
+        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+        TransitionComponent={Fade}
+      >
+        <Box
+          sx={{
+            bgcolor: "rgba(33, 33, 33, 0.95)",
+            color: "white",
+            px: 3,
+            py: 1.5,
+            borderRadius: "50px",
+            display: "flex",
+            alignItems: "center",
+            gap: 1.5,
+            boxShadow: "0 8px 16px rgba(0,0,0,0.1)",
+            mb: 4,
+            backdropFilter: "blur(8px)",
+          }}
+        >
+          <CheckCircle sx={{ fontSize: 20, color: "#4caf50" }} />
+          <Typography variant="body2" fontWeight={600}>
+            Code copied
+          </Typography>
+        </Box>
+      </Snackbar>
     </Card>
   );
 }
