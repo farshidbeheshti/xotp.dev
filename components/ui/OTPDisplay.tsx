@@ -8,9 +8,9 @@ import {
   InputAdornment,
   Tooltip,
   Snackbar,
-  Alert,
+  Fade,
 } from "@mui/material";
-import { ContentCopy } from "@mui/icons-material";
+import { ContentCopy, CheckCircle } from "@mui/icons-material";
 import { QRCodeSVG } from "qrcode.react";
 import { RemainingTime } from "@/components/RemainingTime";
 import { OTPResult } from "@/types/otp";
@@ -85,14 +85,28 @@ export function OTPDisplay({ otp, duration, remaining }: OTPDisplayProps) {
         autoHideDuration={2000}
         onClose={() => setShowToast(false)}
         anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+        TransitionComponent={Fade}
       >
-        <Alert
-          severity="success"
-          variant="filled"
-          onClose={() => setShowToast(false)}
+        <Box
+          sx={{
+            bgcolor: "rgba(33, 33, 33, 0.95)",
+            color: "white",
+            px: 3,
+            py: 1.5,
+            borderRadius: "50px",
+            display: "flex",
+            alignItems: "center",
+            gap: 1.5,
+            boxShadow: "0 8px 16px rgba(0,0,0,0.1)",
+            mb: 4,
+            backdropFilter: "blur(8px)",
+          }}
         >
-          Key URI copied to clipboard!
-        </Alert>
+          <CheckCircle sx={{ fontSize: 20, color: "#4caf50" }} />
+          <Typography variant="body2" fontWeight={600}>
+            Key URI copied
+          </Typography>
+        </Box>
       </Snackbar>
     </Stack>
   );
