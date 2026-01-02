@@ -299,7 +299,11 @@ const keyUri = totp.keyUri({
           mb={2}
         >
           <Typography variant="h6">Generated Code</Typography>
-          <IconButton onClick={handleCopyCode} size="small">
+          <IconButton
+            onClick={handleCopyCode}
+            size="small"
+            aria-label={copied ? "Copied" : "Copy code example"}
+          >
             {copied ? (
               <Check fontSize="small" color="success" />
             ) : (

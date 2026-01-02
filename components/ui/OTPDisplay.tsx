@@ -34,7 +34,13 @@ export function OTPDisplay({ otp, duration, remaining }: OTPDisplayProps) {
       <RemainingTime duration={duration} remaining={remaining} />
 
       <Box textAlign="center" marginY={2}>
-        <Typography variant="h2" component="span">
+        <Typography
+          variant="h2"
+          component="span"
+          aria-live="polite"
+          aria-atomic="true"
+          aria-label={`Current OTP token: ${otp.token.split("").join(" ")}`} // Spaced out for even clearer reading
+        >
           {otp.token}
         </Typography>
       </Box>
@@ -70,7 +76,11 @@ export function OTPDisplay({ otp, duration, remaining }: OTPDisplayProps) {
           InputProps={{
             endAdornment: (
               <InputAdornment position="end">
-                <IconButton onClick={handleCopyKeyUri} edge="end">
+                <IconButton
+                  onClick={handleCopyKeyUri}
+                  edge="end"
+                  aria-label={copied ? "Copied" : "Copy Key URI to clipboard"}
+                >
                   {copied ? <Check color="success" /> : <ContentCopy />}
                 </IconButton>
               </InputAdornment>
