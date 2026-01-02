@@ -121,6 +121,7 @@ export function OTPControls({ options, onOptionsChange }: OTPControlsProps) {
                   }}
                   edge="end"
                   title="Generate Random Secret"
+                  aria-label="Generate random secret"
                 >
                   <Refresh />
                 </IconButton>

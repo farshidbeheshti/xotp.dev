@@ -14,13 +14,18 @@ export function RemainingTime({
   );
 
   return (
-    <Box sx={{ position: "relative" }}>
+    <Box
+      sx={{ position: "relative" }}
+      role="timer"
+      aria-label={`${remaining} seconds remaining`}
+    >
       <CircularProgress
         variant="determinate"
         value={-progressValue}
         thickness={3}
         size={150}
         color={remaining < 10 && remaining < duration / 2 ? "error" : "primary"}
+        aria-hidden="true"
       />
       <Box
         sx={{
