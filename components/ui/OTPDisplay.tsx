@@ -5,12 +5,10 @@ import {
   Typography,
   TextField,
   IconButton,
-  InputAdornment,
   Tooltip,
-  Snackbar,
-  Alert,
+  InputAdornment,
 } from "@mui/material";
-import { ContentCopy } from "@mui/icons-material";
+import { ContentCopy, Check } from "@mui/icons-material";
 import { QRCodeSVG } from "qrcode.react";
 import { RemainingTime } from "@/components/RemainingTime";
 import { OTPResult } from "@/types/otp";
@@ -23,11 +21,12 @@ interface OTPDisplayProps {
 }
 
 export function OTPDisplay({ otp, duration, remaining }: OTPDisplayProps) {
-  const [showToast, setShowToast] = useState(false);
+  const [copied, setCopied] = useState(false);
 
   const handleCopyKeyUri = async () => {
     await copyToClipboard(otp.keyUri);
-    setShowToast(true);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 500);
   };
 
   return (
@@ -72,28 +71,13 @@ export function OTPDisplay({ otp, duration, remaining }: OTPDisplayProps) {
             endAdornment: (
               <InputAdornment position="end">
                 <IconButton onClick={handleCopyKeyUri} edge="end">
-                  <ContentCopy />
+                  {copied ? <Check color="success" /> : <ContentCopy />}
                 </IconButton>
               </InputAdornment>
             ),
           }}
         />
       </Tooltip>
-
-      <Snackbar
-        open={showToast}
-        autoHideDuration={2000}
-        onClose={() => setShowToast(false)}
-        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
-      >
-        <Alert
-          severity="success"
-          variant="filled"
-          onClose={() => setShowToast(false)}
-        >
-          Key URI copied to clipboard!
-        </Alert>
-      </Snackbar>
     </Stack>
   );
 }
