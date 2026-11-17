@@ -13,7 +13,7 @@ export function CodePanel({ options }: CodePanelProps) {
   const [copied, setCopied] = useState(false);
   const codeString = `import { Secret, TOTP } from 'xotp';
 
-const secret = Secret.from('${options.secret}');
+const secret = Secret.from('${options.secret}', 'base32');
 const totp = new TOTP({
   algorithm: '${options.algorithm}',
   digits: ${options.digits},
@@ -21,8 +21,8 @@ const totp = new TOTP({
   issuer: '${options.issuer}',
 });
 
-const token = totp.generate({ secret });
-const keyUri = totp.keyUri({
+const token = await totp.generate({ secret });
+const keyUri = totp.toKeyUri({
   secret,
   account: '${options.account}',
 });`;
@@ -94,6 +94,12 @@ const keyUri = totp.keyUri({
         </Box>
         <Box component="span" sx={{ color: "#a5d6ff" }}>
           &apos;{options.secret}&apos;
+        </Box>
+        <Box component="span" sx={{ color: "#e2e8f0" }}>
+          ,{" "}
+        </Box>
+        <Box component="span" sx={{ color: "#a5d6ff" }}>
+          &apos;base32&apos;
         </Box>
         <Box component="span" sx={{ color: "#e2e8f0" }}>
           );
@@ -208,6 +214,9 @@ const keyUri = totp.keyUri({
           {" "}
           ={" "}
         </Box>
+        <Box component="span" sx={{ color: "#ff7b72" }}>
+          await{" "}
+        </Box>
         <Box component="span" sx={{ color: "#ffa657" }}>
           totp
         </Box>
@@ -247,7 +256,7 @@ const keyUri = totp.keyUri({
           .
         </Box>
         <Box component="span" sx={{ color: "#d2a8ff" }}>
-          keyUri
+          toKeyUri
         </Box>
         <Box component="span" sx={{ color: "#e2e8f0" }}>
           (&#123;

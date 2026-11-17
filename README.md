@@ -1,6 +1,6 @@
 # XOTP Demo (xotp-next)
 
-This project is the official demo and playground website for [xotp](https://github.com/farshidbeheshti/xotp), a powerful One-Time Password (HOTP/TOTP) library for Node.js, Deno, and Bun.
+This project is the official demo and playground website for [xotp](https://github.com/farshidbeheshti/xotp), a zero-dependency One-Time Password (HOTP/TOTP) library that runs in browsers, Node.js, Deno, Bun, and edge runtimes via the Web Crypto API.
 
 Built with [Next.js](https://nextjs.org/) and [Material UI](https://mui.com/), this application demonstrates the capabilities of the `xotp` library in an interactive environment.
 

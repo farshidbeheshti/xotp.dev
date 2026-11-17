@@ -12,16 +12,9 @@ export const DEFAULT_OTP_OPTIONS: OTPOptions = {
 
 export const ALGORITHMS: { value: Algorithm; label: string }[] = [
   { value: 'sha1', label: 'sha-1' },
-  { value: 'sha224', label: 'sha-224' },
   { value: 'sha256', label: 'sha-256' },
   { value: 'sha384', label: 'sha-384' },
   { value: 'sha512', label: 'sha-512' },
-  { value: 'sha-512/224', label: 'sha-512/224' },
-  { value: 'sha-512/256', label: 'sha-512/256' },
-  { value: 'sha3-224', label: 'sha3-224' },
-  { value: 'sha3-256', label: 'sha3-256' },
-  { value: 'sha3-384', label: 'sha3-384' },
-  { value: 'sha3-512', label: 'sha3-512' },
 ];
 
 export const DURATION_LIMITS = {
